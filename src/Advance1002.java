@@ -21,7 +21,7 @@ public class Advance1002 {
 
     private static void init(){
         arr.clear();
-        for(int i=0;i<11;i++)
+        for(int i=0;i<1001;i++)
             arr.add(i,0.0);
         scanner = new Scanner(System.in);
     }
