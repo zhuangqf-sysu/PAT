@@ -5,6 +5,8 @@ PAT 练习
 
 1002 get; C++ get
 
+1003 get
+
 1004 get
 
 1005 get
