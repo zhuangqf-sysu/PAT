@@ -21,6 +21,8 @@ PAT 练习
 
 1010 get
 
+1011 get
+
 1101 timeout；c++ get (同样的算法，c++还是比java要快得多)
 
 1115 get
