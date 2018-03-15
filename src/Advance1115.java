@@ -44,7 +44,9 @@ public class Advance1115 {
         }
         if(node1.value<=node2.value){
             node2.leftNode = getLevel(node1,node2.leftNode,i+1);
-        }else node2.rightNode = getLevel(node1,node2.rightNode,i+1);
+        }else {
+            node2.rightNode = getLevel(node1, node2.rightNode, i + 1);
+        }
         return node2;
     }
 
