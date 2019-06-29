@@ -1,4 +1,4 @@
-package hiho.game;
+package hiho.train;
 
 import java.util.*;
 import java.util.stream.Collectors;
