@@ -1,36 +1,55 @@
 package ali;
 
-import java.util.Scanner;
+import java.math.BigInteger;
+import java.util.concurrent.*;
 
-/**
- * @author zhuangqf
- * @date 2019/4/12
- */
+
 public class Main {
 
-    private static final int MOD = 10000;
+    private final static int PARALLELISM = 64;
 
-    private static int f(int k, int m) {
-        int result = 0;
-        // 第一个碗放i个丸子
-        for(int i=1;i*k<=m; i++) {
-            result += f(k-1,m-i*k);
-        }
+    public BigInteger sum(int[] array) throws ExecutionException, InterruptedException {
+        Long begin = System.currentTimeMillis();
+        ForkJoinPool pool = new ForkJoinPool(PARALLELISM);
+        Future<BigInteger> future = pool.submit(new SumTask(array,0,array.length));
+        BigInteger result = future.get();
+        Long end = System.currentTimeMillis();
+        System.out.println("总耗时："+ (end - begin) + "ms");
         return result;
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int M = scanner.nextInt();
-        int N = scanner.nextInt();
-        int K = scanner.nextInt();
+    private static class SumTask extends RecursiveTask<BigInteger> {
 
-        int result = 0;
-        for(int i=1;i<K;i++) {
-            result += f(i,M) * f(K-i,N);
-            result %= 10000;
+        // 每个"小任务"最多只累加5000个数,暂定可调
+        private static final int MAX = 5000;
+        private int arr[];
+        private int begin;
+        private int end;
+
+        public SumTask(int arr[], int begin, int end) {
+            this.arr = arr;
+            this.begin = begin;
+            this.end = end;
         }
-        System.out.println(result);
-    }
 
+        @Override
+        protected BigInteger compute() {
+
+            if(this.end - this.begin > MAX)  {
+                // 任务分解
+                int medium = (begin + end) /2;
+                SumTask left = new SumTask(arr,begin,medium);
+                SumTask right = new SumTask(arr,medium,end);
+                left.fork();
+                right.fork();
+                return left.join().add(right.join());
+            }else {
+                BigInteger sum = BigInteger.ZERO;
+                for(int i=begin;i<end;i++) {
+                    sum.add(BigInteger.valueOf(arr[i]));
+                }
+                return sum;
+            }
+        }
+    }
 }

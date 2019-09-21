@@ -1,3 +1,5 @@
+package pat;
+
 import java.util.Scanner;
 
 /**
